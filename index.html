@@ -4,16 +4,54 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&display=swap"
+      rel="stylesheet"
+    />
     <title>Gatos</title>
   </head>
   <body>
-    <h1>Gatos</h1>
+    <h1>Gallery Cats</h1>
 
-    <img width="320px" height="220px" id="img1" src="" alt="foto gato" />
-    <img width="320px" height="220px" id="img2" src="" alt="foto gato" />
-    <img width="320px" height="220px" id="img3" src="" alt="foto gato" />
+    <h2>Gatitos</h2>
+    <section id="randomCats">
+      <article>
+        <img id="img1" src="" alt="foto gato" />
+        <button>Guardar en favoritos</button>
+      </article>
+      <article>
+        <img id="img2" src="" alt="foto gato" />
+        <button>Guardar en favoritos</button>
+      </article>
+      <article>
+        <img id="img3" src="" alt="foto gato" />
+        <button>Guardar en favoritos</button>
+      </article>
+      <article>
+        <img id="img4" src="" alt="foto gato" />
+        <button>Guardar en favoritos</button>
+      </article>
+    </section>
 
-    <button onclick="reload()">new image</button>
+    <h2 class="title-favorites">Favoritos</h2>
+    <section id="favoritesCats">
+      <article>
+        <img id="img3" src="" alt="foto gato" />
+        <button>Sacar de favoritos</button>
+      </article>
+      <article>
+        <img id="img3" src="" alt="foto gato" />
+        <button>Sacar de favoritos</button>
+      </article>
+      <article>
+        <img id="img3" src="" alt="foto gato" />
+        <button>Sacar de favoritos</button>
+      </article>
+    </section>
+
     <script src="./main.js"></script>
   </body>
 </html>
