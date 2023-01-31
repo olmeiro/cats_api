@@ -1,3 +1,5 @@
+https://github.com/public-apis/public-apis
+
 https://thecatapi.com/
 
 API_KEY:
