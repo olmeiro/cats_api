@@ -125,6 +125,22 @@ section button:hover {
   flex-direction: column;
 }
 
+#favoritesCats article img {
+  border-radius: 5px;
+}
+
+#favoritesCats article button {
+ background-color: black;
+  cursor: pointer;
+  color: white;
+}
+
+#favoritesCats article button:hover {
+ background-color: white;
+  cursor: pointer;
+  color: black;
+}
+
 .imageStatus {
   width: 320px;
   height:300px;
