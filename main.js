@@ -14,6 +14,8 @@ const endpoints = {
   API_URL_FAVORITES: `https://api.thecatapi.com/v1/favourites`,
   API_URL_FAVORITES_DELETE: (id) =>
     `https://api.thecatapi.com/v1/favourites/${id}`,
+  URL_UPLOAD: `https://api.thecatapi.com/v1/images/upload`,
+  URL_OWN_CATS: "https://api.thecatapi.com/v1/images/",
 };
 
 let HTTPStatus = [
@@ -133,7 +135,7 @@ async function loadFavoritesCats() {
     spanError.appendChild(imageStatus);
   } else {
     const sectionFavorites = document.getElementById("favoritesCats");
-    sectionFavorites.innerHTML = ''
+    sectionFavorites.innerHTML = "";
     data.forEach((cat) => {
       const article = document.createElement("article");
       const imageFavoriteCat = document.createElement("img");
@@ -195,6 +197,56 @@ async function deleteFavoriteCat(id) {
   } else {
     console.log("GAto eliminado de favoritos.");
     loadFavoritesCats();
+  }
+}
+
+const previewCat = document.getElementById('preview')
+previewCat.src = './poo-solid.svg'
+
+async function uploadCatPhoto() {
+  const form = document.getElementById("uploadingForm");
+  const formData = new FormData(form);
+
+  console.log("formData", formData.get('file'));
+
+  const response = await fetch(endpoints.URL_UPLOAD, {
+    method: "POST",
+    headers: {
+      "x-api-key": api_key,
+    },
+    body: formData,
+  });
+
+  const data = await response.json();
+
+
+
+  if (response.status > 299) {
+    const error = HTTPStatus.find((item) => item.number === response.status);
+    const imageStatus = document.createElement("img");
+
+    imageStatus.className = "imageStatus";
+    imageStatus.src = error.link;
+    spanError.appendChild(imageStatus);
+  } else if (response.status === 201) {
+    console.log("Foto de michi cargada :)");
+    console.log({ data });
+    console.log(data.url);
+    saveFavoriteCat(data.id); //para agregar el michi cargado a favoritos.
+    loadFavoritesCats();
+  }
+}
+
+const previewImage = () => {
+  const file = document.getElementById("file").files;
+  console.log(file);
+  if (file.length > 0) {
+    const fileReader = new FileReader();
+
+    fileReader.onload = function (e) {
+      document.getElementById("preview").setAttribute("src", e.target.result);
+    };
+    fileReader.readAsDataURL(file[0]);
   }
 }
 
