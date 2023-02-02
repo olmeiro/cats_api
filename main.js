@@ -1,6 +1,11 @@
 const api_key =
   "live_l5UFrA4tPIxU7gGVsqbu3fb8hp1oZ8TxlCmRNHldJE6diDWOggjbPd12xQGhDj8t";
 
+const api = axios.create({
+  baseURL: "https://api.thecatapi.com/v1/",
+  headers: { 'x-api-key': api_key }
+});
+
 const endpoints = {
   API_URL: "https://api.thecatapi.com/v1/images/search",
   API_URL_LIMIT: (limit = 4) =>
@@ -155,19 +160,36 @@ async function loadFavoritesCats() {
 }
 
 async function saveFavoriteCat(id) {
-  const response = await fetch(endpoints.API_URL_FAVORITES, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": api_key },
-    body: JSON.stringify({
-      image_id: id,
-    }),
+  // const response = await fetch(endpoints.API_URL_FAVORITES, {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json", "x-api-key": api_key },
+  //   body: JSON.stringify({
+  //     image_id: id,
+  //   }),
+  // });
+
+  // console.log("SAVE:");
+  // console.log(response);
+
+  // if (response.status !== 200) {
+  //   const error = HTTPStatus.find((item) => item.number === response.status);
+  //   const imageStatus = document.createElement("img");
+
+  //   imageStatus.className = "imageStatus";
+  //   imageStatus.src = error.link;
+  //   spanError.appendChild(imageStatus);
+  // } else {
+  //   console.log("Gato guardado con éxito.");
+  //   loadFavoritesCats();
+  // }
+
+  //con Axios queda:
+  const { status } = await api.post("/favourites", {
+    image_id: id,
   });
 
-  console.log("SAVE:");
-  console.log(response);
-
-  if (response.status !== 200) {
-    const error = HTTPStatus.find((item) => item.number === response.status);
+  if (status !== 200) {
+    const error = HTTPStatus.find((item) => item.number === status);
     const imageStatus = document.createElement("img");
 
     imageStatus.className = "imageStatus";
@@ -200,35 +222,53 @@ async function deleteFavoriteCat(id) {
   }
 }
 
-const previewCat = document.getElementById('preview')
-previewCat.src = './poo-solid.svg'
+const previewCat = document.getElementById("preview");
+previewCat.src = "./poo-solid.svg";
 
 async function uploadCatPhoto() {
   const form = document.getElementById("uploadingForm");
   const formData = new FormData(form);
 
-  console.log("formData", formData.get('file'));
+  // console.log("formData", formData.get("file"));
 
-  const response = await fetch(endpoints.URL_UPLOAD, {
-    method: "POST",
-    headers: {
-      "x-api-key": api_key,
-    },
-    body: formData,
-  });
+  // const response = await fetch(endpoints.URL_UPLOAD, {
+  //   method: "POST",
+  //   headers: {
+  //     "x-api-key": api_key,
+  //   },
+  //   body: formData,
+  // });
 
-  const data = await response.json();
+  // const data = await response.json();
 
+  // if (response.status > 299) {
+  //   const error = HTTPStatus.find((item) => item.number === response.status);
+  //   const imageStatus = document.createElement("img");
 
+  //   imageStatus.className = "imageStatus";
+  //   imageStatus.src = error.link;
+  //   spanError.appendChild(imageStatus);
+  // } else if (response.status === 201) {
+  //   console.log("Foto de michi cargada :)");
+  //   console.log({ data });
+  //   console.log(data.url);
+  //   saveFavoriteCat(data.id); //para agregar el michi cargado a favoritos.
+  //   loadFavoritesCats();
+  // }
 
-  if (response.status > 299) {
+  //con Axios:
+  const { data, status } = await api.post('images/upload', {
+    data: formData
+  })
+
+  if (status !== 201) {
     const error = HTTPStatus.find((item) => item.number === response.status);
     const imageStatus = document.createElement("img");
 
     imageStatus.className = "imageStatus";
     imageStatus.src = error.link;
     spanError.appendChild(imageStatus);
-  } else if (response.status === 201) {
+  } else {
     console.log("Foto de michi cargada :)");
     console.log({ data });
     console.log(data.url);
@@ -248,7 +288,7 @@ const previewImage = () => {
     };
     fileReader.readAsDataURL(file[0]);
   }
-}
+};
 
 loadRandomCats();
 loadFavoritesCats();
