@@ -1,9 +1,127 @@
+//Clon Axios ->
+
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+// const API_URL_CATS = "https://api.thecatapi.com/v1/images/search";
+const API_URL_PRODUCTS = "https://api.escuelajs.co/api/v1/products";
+
+//using XMLHTTPRequest to clone Axios:
+class customFetch {
+  constructor() {
+    this.methods = {
+      get: "GET",
+      post: "POST",
+      put: "PUT",
+      delete: "DELETE",
+    };
+    //instancing the prototype with its methods to access them when its needed during the request
+  }
+
+  get({ urlApi, id = null, params = null, addition = null }) {
+    console.log("GET-urlApi", urlApi)
+    this.#call({
+      urlApi,
+      id,
+      params,
+      addition,
+      method: this.methods.get,
+    });
+    //calling private method to make xhttp request with its corresponding HTTP method
+  }
+
+  put({ urlApi, id = null, params = null, addition = null }) {
+    this.#call({
+      urlApi,
+      id,
+      params,
+      addition,
+      method: this.methods.put,
+    });
+  }
+
+  post({ urlApi, id = null, params = null, addition = null }) {
+    this.#call({
+      urlApi,
+      id,
+      params,
+      addition,
+      method: this.methods.post,
+    });
+  }
+
+  del({ urlApi, id = null, params = null, addition = null }) {
+    this.#call({
+      urlApi,
+      id,
+      params,
+      addition,
+      method: this.methods.delete,
+    });
+  }
+
+  //#call:private method
+  #call({ urlApi, id = null, params = null, addition = null, method = null }) {
+    const xhttp = new XMLHttpRequest();
+    //creating XMLHttpRequest instance
+    console.log("urlApiCALL:::", urlApi)
+
+    //   if (urlApi === undefined) return 'invalid url'
+
+    //   let newApi = urlApi;
+    //   //storing urlApi as a variable to concat it with another variable
+
+    //   if (addition) {
+    //     newApi = `${urlApi}/ + ${id}`;
+    //     //newApi will be the sum of both variables
+    //   }
+
+    //   xhttp.open(method, newApi, true);
+    //   //opening the asynchronous communication with the newApi variable and the method pointed in the call of #call method
+
+    //   xhttp.setRequestHeader("Content-type", "application/json");
+    //   //sending headers
+
+    //   xhttp.onreadystatechange = function (ev) {
+    //     if (xhttp.readyState === 4) {
+    //       if (xhttp.status === 200) {
+    //         const res = JSON.parse(xhttp.responseText);
+
+    //         console.log(res);
+    //         //parsing and recieving in console result of xhttp request
+    //       } else {
+    //         console.error(ev);
+    //       }
+    //     }
+    //   };
+
+    //   let stringified = JSON.stringify(params);
+    //   //converting into a string the body of the request
+
+    //   xhttp.send(stringified);
+    //   //sending body
+  }
+
+}
+
+
+function executeOwnAxios() {
+  const API_URL_PRODUCTS = "https://api.escuelajs.co/api/v1/products";
+  const ownAxios = new customFetch();
+  const response = ownAxios.get('https://api.escuelajs.co/api/v1/products');
+  console.log("REsponse", response)
+}
+
+// executeOwnAxios(API_URL_PRODUCTS)
+executeOwnAxios()
+
+// ===================================================================================
+
 const api_key =
   "live_l5UFrA4tPIxU7gGVsqbu3fb8hp1oZ8TxlCmRNHldJE6diDWOggjbPd12xQGhDj8t";
 
 const api = axios.create({
   baseURL: "https://api.thecatapi.com/v1/",
-  headers: { 'x-api-key': api_key }
+  headers: { "x-api-key": api_key },
 });
 
 const endpoints = {
@@ -160,29 +278,6 @@ async function loadFavoritesCats() {
 }
 
 async function saveFavoriteCat(id) {
-  // const response = await fetch(endpoints.API_URL_FAVORITES, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json", "x-api-key": api_key },
-  //   body: JSON.stringify({
-  //     image_id: id,
-  //   }),
-  // });
-
-  // console.log("SAVE:");
-  // console.log(response);
-
-  // if (response.status !== 200) {
-  //   const error = HTTPStatus.find((item) => item.number === response.status);
-  //   const imageStatus = document.createElement("img");
-
-  //   imageStatus.className = "imageStatus";
-  //   imageStatus.src = error.link;
-  //   spanError.appendChild(imageStatus);
-  // } else {
-  //   console.log("Gato guardado con éxito.");
-  //   loadFavoritesCats();
-  // }
-
   //con Axios queda:
   const { status } = await api.post("/favourites", {
     image_id: id,
@@ -229,37 +324,9 @@ async function uploadCatPhoto() {
   const form = document.getElementById("uploadingForm");
   const formData = new FormData(form);
 
-  // console.log("formData", formData.get("file"));
-
-  // const response = await fetch(endpoints.URL_UPLOAD, {
-  //   method: "POST",
-  //   headers: {
-  //     "x-api-key": api_key,
-  //   },
-  //   body: formData,
-  // });
-
-  // const data = await response.json();
-
-  // if (response.status > 299) {
-  //   const error = HTTPStatus.find((item) => item.number === response.status);
-  //   const imageStatus = document.createElement("img");
-
-  //   imageStatus.className = "imageStatus";
-  //   imageStatus.src = error.link;
-  //   spanError.appendChild(imageStatus);
-  // } else if (response.status === 201) {
-  //   console.log("Foto de michi cargada :)");
-  //   console.log({ data });
-  //   console.log(data.url);
-  //   saveFavoriteCat(data.id); //para agregar el michi cargado a favoritos.
-  //   loadFavoritesCats();
-  // }
-
-  //con Axios:
-  const { data, status } = await api.post('images/upload', {
-    data: formData
-  })
+  const { data, status } = await api.post("images/upload", {
+    data: formData,
+  });
 
   if (status !== 201) {
     const error = HTTPStatus.find((item) => item.number === response.status);
